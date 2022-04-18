@@ -1,24 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useEffect, useState} from 'react';
+import { Simpson } from './Simpson';
+import axios from 'axios';
 
 function App() {
+  const [simpson, setSimpson] = useState([])
+
+  const citation = () => {
+    axios
+    .get('https://simpsons-quotes-api.herokuapp.com/quotes?count=num')
+    .then((response)=> setSimpson(response.data[0]))
+  };
+  
+  useEffect(() => {
+    axios.get('https://simpsons-quotes-api.herokuapp.com/quotes?count=num')
+    .then(res => setSimpson(res.data[0]))
+    }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+       <Simpson simpson={simpson} />
+       <button onClick={() => citation()}
+       >Random Quote</button>
+       </div>
   );
 }
 
